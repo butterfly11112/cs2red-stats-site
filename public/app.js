@@ -35,13 +35,16 @@ const AWARDS = {
   15: { name: "Fal26", img: "https://files.cs2red.ru/public/emberfall/medal_fall.png" },
 };
 
-function getActiveVip(user) {
+function getAllVips(user) {
   const vips = Array.isArray(user.vips) ? user.vips : [];
   const now = Date.now();
-  const active = vips.filter((v) => v.expires === 0 || v.expires * 1000 > now);
-  if (!active.length) return null;
-  active.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
-  return active[0];
+  return vips
+    .map((v) => ({ ...v, active: v.expires === 0 || v.expires * 1000 > now }))
+    .sort((a, b) => {
+      if (a.active !== b.active) return a.active ? -1 : 1; // active ones first
+      if (a.active) return (b.priority ?? 0) - (a.priority ?? 0); // higher priority first
+      return (b.expires ?? 0) - (a.expires ?? 0); // most recently expired first
+    });
 }
 
 // --- Mode tabs -------------------------------------------------------
@@ -161,14 +164,26 @@ function renderProfile(user, steamid64) {
   roleBadge.textContent = role.name;
   roleBadge.style.color = role.hex;
 
-  const vip = getActiveVip(user);
-  const vipBadge = document.getElementById("vipBadge");
-  if (vip) {
-    vipBadge.textContent =
-      "VIP " + vip.group + (vip.expires === 0 ? " · бессрочно" : " · до " + formatDate(vip.expires));
-    vipBadge.classList.remove("hidden");
+  const vips = getAllVips(user);
+  const vipBadges = document.getElementById("vipBadges");
+  vipBadges.innerHTML = "";
+  if (vips.length) {
+    for (const v of vips) {
+      const el = document.createElement("div");
+      el.className = "vip-badge" + (v.active ? "" : " expired");
+      el.textContent =
+        "VIP " +
+        v.group +
+        (v.active
+          ? v.expires === 0
+            ? " · бессрочно"
+            : " · до " + formatDate(v.expires)
+          : " · истёк " + formatDate(v.expires));
+      vipBadges.appendChild(el);
+    }
+    vipBadges.classList.remove("hidden");
   } else {
-    vipBadge.classList.add("hidden");
+    vipBadges.classList.add("hidden");
   }
 
   const awardsRow = document.getElementById("awardsRow");
