@@ -35,16 +35,12 @@ const AWARDS = {
   15: { name: "Fal26", img: "https://files.cs2red.ru/public/emberfall/medal_fall.png" },
 };
 
-function getAllVips(user) {
+function getActiveVips(user) {
   const vips = Array.isArray(user.vips) ? user.vips : [];
   const now = Date.now();
   return vips
-    .map((v) => ({ ...v, active: v.expires === 0 || v.expires * 1000 > now }))
-    .sort((a, b) => {
-      if (a.active !== b.active) return a.active ? -1 : 1; // active ones first
-      if (a.active) return (b.priority ?? 0) - (a.priority ?? 0); // higher priority first
-      return (b.expires ?? 0) - (a.expires ?? 0); // most recently expired first
-    });
+    .filter((v) => v.expires === 0 || v.expires * 1000 > now)
+    .sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
 }
 
 // --- Mode tabs -------------------------------------------------------
