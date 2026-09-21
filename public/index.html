@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CS2RED Stats — статистика игроков</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="topbar">
+      <div class="logo-mark">CS2<span>RED</span></div>
+      <div class="topbar-sub">Stats — статистика игрока по ссылке на Steam</div>
+    </header>
+
+    <div class="mode-tabs">
+      <button type="button" id="modeSingleBtn" class="mode-tab active">Игрок</button>
+      <button type="button" id="modeCompareBtn" class="mode-tab">Сравнение</button>
+    </div>
+
+    <!-- ===================== Single-player mode ===================== -->
+    <section id="singleMode">
+      <form id="searchForm" class="search-row">
+        <input
+          id="steamInput"
+          type="text"
+          placeholder="Ссылка на Steam-профиль или SteamID64"
+          autocomplete="off"
+        />
+        <button type="submit" id="searchBtn">Найти</button>
+      </form>
+
+      <div id="status" class="status hidden"></div>
+
+      <div id="card" class="card hidden">
+        <div class="card-head">
+          <img id="avatar" class="avatar" src="" alt="" />
+          <div class="card-head-info">
+            <div class="nick-row">
+              <span id="nick" class="nick"></span>
+              <span id="clanTag" class="clan-tag hidden"></span>
+            </div>
+            <div class="badge-row">
+              <div id="roleBadge" class="role-badge"></div>
+              <div id="vipBadge" class="vip-badge hidden"></div>
+            </div>
+          </div>
+          <a id="cs2redLink" class="ext-link hidden" href="#" target="_blank" rel="noopener" title="Открыть на cs2red.ru">↗</a>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-tile"><div class="stat-value" id="statPoints">0</div><div class="stat-label">Рейтинг</div></div>
+          <div class="stat-tile"><div class="stat-value" id="statCoins">0</div><div class="stat-label">Коинов</div></div>
+          <div class="stat-tile"><div class="stat-value" id="statKills">0</div><div class="stat-label">Убийств</div></div>
+          <div class="stat-tile"><div class="stat-value" id="statDeaths">0</div><div class="stat-label">Смертей</div></div>
+          <div class="stat-tile"><div class="stat-value" id="statAssists">0</div><div class="stat-label">Помощи</div></div>
+          <div class="stat-tile"><div class="stat-value" id="statKD">0</div><div class="stat-label">K/D</div></div>
+          <div class="stat-tile"><div class="stat-value" id="statAcc">0%</div><div class="stat-label">Точность</div></div>
+          <div class="stat-tile"><div class="stat-value" id="statTier">0</div><div class="stat-label">Тир ранга</div></div>
+        </div>
+
+        <div id="awardsRow" class="awards-row hidden"></div>
+
+        <div class="meta-list">
+          <div class="meta-row"><span>Дата регистрации</span><span id="metaReg">—</span></div>
+          <div class="meta-row"><span>Последний вход</span><span id="metaLast">—</span></div>
+          <div class="meta-row"><span>Клан</span><span id="metaClan">—</span></div>
+          <div class="meta-row"><span>Plus-подписка</span><span id="metaPlus">—</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== Compare mode ===================== -->
+    <section id="compareMode" class="hidden">
+      <form id="compareForm" class="compare-form">
+        <input id="compareInput1" type="text" placeholder="Игрок 1 — ссылка или SteamID64" autocomplete="off" />
+        <input id="compareInput2" type="text" placeholder="Игрок 2 — ссылка или SteamID64" autocomplete="off" />
+        <button type="submit" id="compareBtn">Сравнить</button>
+      </form>
+
+      <div id="compareStatus" class="status hidden"></div>
+
+      <div id="compareCard" class="card hidden">
+        <div class="compare-head">
+          <div class="compare-player">
+            <img id="compareAvatar1" class="avatar avatar-sm" src="" alt="" />
+            <div class="compare-nick" id="compareNick1"></div>
+          </div>
+          <div class="compare-vs">VS</div>
+          <div class="compare-player">
+            <img id="compareAvatar2" class="avatar avatar-sm" src="" alt="" />
+            <div class="compare-nick" id="compareNick2"></div>
+          </div>
+        </div>
+
+        <table class="compare-table" id="compareTable"></table>
+      </div>
+    </section>
+
+    <footer class="footer">Данные с cs2red.ru · неофициальный сайт, не связан с CS2RED или Valve</footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
