@@ -160,21 +160,17 @@ function renderProfile(user, steamid64) {
   roleBadge.textContent = role.name;
   roleBadge.style.color = role.hex;
 
-  const vips = getAllVips(user);
+  const vips = getActiveVips(user);
   const vipBadges = document.getElementById("vipBadges");
   vipBadges.innerHTML = "";
   if (vips.length) {
     for (const v of vips) {
       const el = document.createElement("div");
-      el.className = "vip-badge" + (v.active ? "" : " expired");
+      el.className = "vip-badge";
       el.textContent =
         "VIP " +
         v.group +
-        (v.active
-          ? v.expires === 0
-            ? " · бессрочно"
-            : " · до " + formatDate(v.expires)
-          : " · истёк " + formatDate(v.expires));
+        (v.expires === 0 ? " · бессрочно" : " · до " + formatDate(v.expires));
       vipBadges.appendChild(el);
     }
     vipBadges.classList.remove("hidden");
